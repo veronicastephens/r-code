@@ -1,0 +1,75 @@
+---
+title: "function_export_all_dfs"
+author: "Veronica Stephens"
+date: "April 13 2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=TRUE,message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+#load libraries
+library(tidyverse) 
+library(openxlsx) 
+library(stringr)
+library(stringi)
+library(DescTools)
+library(lubridate)
+
+```
+
+```{r}
+#define working directory
+wd = 'C:/Downloads/'
+
+```
+
+```{r}
+# create dataframes
+df_a = data.frame(replicate(5,sample(0:100,100,rep=TRUE)))
+df_b = data.frame(replicate(5,sample(0:100,100,rep=TRUE)))
+df_c = data.frame(replicate(5,sample(0:100,100,rep=TRUE)))
+
+```
+
+```{r}
+#remove all excess data frames not needed for export
+#get list of current data frames
+list = Filter(function(x) is.data.frame(get(x)),ls())
+print(list)
+# rm() #add dfs to remove
+
+#create df with current data frames
+df_export<- data.frame(df_names=Filter(function(x) is.data.frame(get(x)),ls()))
+
+#function to export files
+my.export <- function(x){
+  
+  # x = df_export[[1,1]] #debugging
+  # name = 'df_inf' #debugging
+  
+  #x is a factor, name is a string
+  name = as.character(x)
+  
+  #define df, date, random string, and path for exported files
+  df_exp <- get(as.character(name))
+  date_exp = gsub('-','',substr(Sys.Date(),3,10))
+  ran_string <- stri_rand_strings(1, 5, '[a-z]')
+  exp_pth <- paste0(wd,'',sep='') #add additional path/folder name if needed
+
+  #export to csv
+  write.csv(df_exp, paste(exp_pth, paste(name,date_exp,ran_string,sep="_"),
+                          '.csv', sep = ''), 
+            row.names = FALSE)
+
+  print(paste0('Finished file: ',name))
+}
+
+#call function
+invisible(lapply(df_export[[1]], my.export))
+
+```
+
+
+
