@@ -8,8 +8,8 @@ Collection of R code solutions across projects and visualizations in R with publ
 Function to export all data frames within a project with data frame name and date to specified folder
 Rmd and html files
 
-**RVisualizations.pdf**
-
+**RVisualizations.pdf:**
+Visualizations for water use, projected demand, and recharge analysis in Texas. 
 
 ### Programs
 R
